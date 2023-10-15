@@ -19,10 +19,68 @@ const Register = () => {
     setClientName(e.target.value);
     setErrClientName("");
   }
-  function handleEmail() {}
-  function handlePassword() {}
-  function handleCPassword() {}
-  function handleRegistration() {}
+  function handleEmail(e) {
+    setEmail(e.target.value);
+    setErrEmail("");
+  }
+  function handlePassword(e) {
+    setPassword(e.target.value);
+    setErrPassword("");
+  }
+  function handleCPassword(e) {
+    setCPassword(e.target.value);
+    setErrCPassword("");
+  }
+
+  function isValidEmail(email) {
+    return String(email)
+      .toLowerCase()
+      .match(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/);
+  }
+
+  // hdnadle submit
+  function handleRegistration(e) {
+    e.preventDefault();
+    if (!clientName) {
+      setErrClientName("Enter your name");
+    }
+    if (!email) {
+      setErrEmail("Enter your email");
+    } else {
+      if (!isValidEmail(email)) {
+        setErrEmail("Enter a valid email");
+      }
+    }
+    if (!password) {
+      setErrPassword("Enter your password");
+    } else {
+      if (password.length <= 6) {
+        setErrPassword("Passwords must be at least 6 characters");
+      }
+    }
+    if (!cPassword) {
+      setErrCPassword("Confirm your password");
+    } else {
+      if (cPassword !== password) {
+        setErrCPassword("Password not matched");
+      }
+    }
+    if (
+      clientName &&
+      email &&
+      isValidEmail(email) &&
+      password &&
+      password.length >= 6 &&
+      cPassword &&
+      cPassword === password
+    ) {
+      console.log(clientName, email, password);
+      setClientName("");
+      setEmail("");
+      setPassword("");
+      setCPassword("");
+    }
+  }
 
   return (
     <div>
