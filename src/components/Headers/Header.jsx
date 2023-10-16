@@ -5,17 +5,20 @@ import { BiCaretDown } from "react-icons/bi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlLocationPin } from "react-icons/sl";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const products = useSelector((state) => state.amazonReducer.products);
+  console.log(products);
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
       <div className="w-full h-full inline-flex justify-between items-center mx-auto gap-1 mdl:gap-3 px-4 ">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="px-2 border border-transparent hover:border-white duration-300 rounded cursor-pointer flex justify-center items-center h-[70%] "
         >
           <img className="w-28 object-cover mt-1" src={logo} alt="logoImage" />
-        </a>
+        </Link>
         <div className="px-2 border border-transparent hover:border-white duration-300 rounded cursor-pointer hidden xl:inline-flex gap-1 justify-center items-center h-[70%] ">
           <SlLocationPin />
           <div className="text-xs">
@@ -48,8 +51,8 @@ const Header = () => {
           <p>Marked</p>
           <p className="text-white font-bold">& Favorite</p>
         </div>
-        <a
-          href="/cart"
+        <Link
+          to="/cart"
           className=" relative border border-transparent hover:border-white duration-300 rounded cursor-pointer flex items-center h-[70%]  px-2"
         >
           <img
@@ -59,9 +62,9 @@ const Header = () => {
           />
           <p className="text-white font-bold text-xs mt-3">Cart</p>
           <span className="text-sm text-amazon_yellow font-semibold absolute top-2 left-[29px]">
-            0
+            {products.length > 0 ? products.length : 0}
           </span>
-        </a>
+        </Link>
       </div>
     </div>
   );

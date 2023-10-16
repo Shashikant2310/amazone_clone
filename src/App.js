@@ -8,16 +8,19 @@ import {
   Outlet,
   Route,
   RouterProvider,
+  ScrollRestoration,
 } from "react-router-dom";
 import Home from "./pages/Home";
 import { productData } from "./api/api";
 import Register from "./pages/Register";
+import Cart from "./pages/Cart";
 
 const Layout = () => {
   return (
     <div>
       <Header />
       <Panel />
+      <ScrollRestoration />
       <Outlet />
       <Footer />
     </div>
@@ -30,6 +33,7 @@ export default function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} loader={productData} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/registration" element={<Register />} />
