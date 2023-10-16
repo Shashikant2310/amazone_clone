@@ -8,8 +8,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const products = useSelector((state) => state.amazonReducer.products);
-  console.log(products);
+  const products = useSelector((state) => state.amazon.products);
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
       <div className="w-full h-full inline-flex justify-between items-center mx-auto gap-1 mdl:gap-3 px-4 ">
