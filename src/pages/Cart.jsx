@@ -46,7 +46,10 @@ const Cart = () => {
             </div>
 
             {products.map((item) => (
-              <div className="flex items-center select-none hover:bg-gray-100 -mx-8 px-6 py-5">
+              <div
+                key={item.id}
+                className="flex items-center select-none hover:bg-gray-100 -mx-8 px-6 py-5"
+              >
                 <div className="flex w-2/5">
                   <div className="w-20">
                     <img

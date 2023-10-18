@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import { BiSolidRightArrow } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { darkLogo } from "../assets/index";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { RotatingLines } from "react-loader-spinner";
+import { motion } from "framer-motion";
 
 const Register = () => {
+  const auth = getAuth();
+  const navigate = useNavigate();
+
   const [clientName, setClientName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cPassword, setCPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [sucessMsg, setSucessMsg] = useState("");
 
   // Error Message start
   const [errClientName, setErrClientName] = useState("");
   const [errEmail, setErrEmail] = useState("");
   const [errPassword, setErrPassword] = useState("");
   const [errCPassword, setErrCPassword] = useState("");
+  const [errFirebase, setErrFirebase] = useState("");
 
   function handleName(e) {
     setClientName(e.target.value);
@@ -22,6 +35,7 @@ const Register = () => {
   function handleEmail(e) {
     setEmail(e.target.value);
     setErrEmail("");
+    setErrFirebase("");
   }
   function handlePassword(e) {
     setPassword(e.target.value);
@@ -74,11 +88,37 @@ const Register = () => {
       cPassword &&
       cPassword === password
     ) {
-      console.log(clientName, email, password);
+      setIsLoading(true);
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          updateProfile(auth.currentUser, {
+            displayName: clientName,
+            photoURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTZiDYVFY3pHMqANAFlTdWbwF2KpclMAbp8g&usqp=CAU",
+          });
+          // Signed up
+          const user = userCredential.user;
+          setIsLoading(false);
+          setSucessMsg("Account created successful");
+          setTimeout(() => {
+            navigate("/signin");
+          }, 3000);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          if (errorCode.includes("auth/email-already-in-use")) {
+            setErrFirebase("Email Already in use, Try another one");
+          }
+          // ..
+        });
+      //firebase end
       setClientName("");
       setEmail("");
       setPassword("");
       setCPassword("");
+      setErrFirebase("");
+      setSucessMsg("");
     }
   }
 
@@ -130,6 +170,14 @@ const Register = () => {
                       {errEmail}
                     </p>
                   )}
+                  {errFirebase && (
+                    <p className="text-red-600 text-xs font-semibold tracking-wide flex items-center gap-2 -mt-1.5">
+                      <span className="italic font-titleFont font-extrabold text-base">
+                        !
+                      </span>
+                      {errFirebase}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <p className="text-sm font-medium">Password</p>
@@ -175,7 +223,29 @@ const Register = () => {
                   Continue
                 </button>
               </div>
-
+              {isLoading && (
+                <div className="flex justify-center">
+                  <RotatingLines
+                    strokeColor="#FEBD69"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="50"
+                    visible={true}
+                  />
+                </div>
+              )}
+              {sucessMsg && (
+                <div className="text-center mt-2">
+                  <motion.p
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="2xl text-green-500 font-medium"
+                  >
+                    {sucessMsg}
+                  </motion.p>
+                </div>
+              )}
               <p className="text-xs text-black leading-4 mt-4">
                 By Continuing, you agree to Amazon's
                 <span className="text-blue-600">

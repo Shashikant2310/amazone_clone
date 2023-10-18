@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [],
-  userInfo: [],
+  userInfo: null,
 };
 
 export const amazonSlice = createSlice({
@@ -37,6 +37,12 @@ export const amazonSlice = createSlice({
     resetCart: (state) => {
       state.products = [];
     },
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+    },
+    userSignOut: (state) => {
+      state.userInfo = null;
+    },
   },
 });
 
@@ -46,6 +52,8 @@ export const {
   resetCart,
   increseQuantity,
   decreseQuantity,
+  setUserInfo,
+  userSignOut,
 } = amazonSlice.actions;
 
 export default amazonSlice.reducer;

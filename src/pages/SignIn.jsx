@@ -1,18 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { darkLogo } from "../assets/index";
 import { BiSolidRightArrow } from "react-icons/bi";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { RotatingLines } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../redux/amazonSlice";
 
 const SignIn = () => {
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errEmail, setErrEmail] = useState("");
   const [errPassword, setErrPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
 
   function handleEmail(e) {
     //email
     setEmail(e.target.value);
     setErrEmail("");
+    setErrMessage("");
   }
 
   function handlePassword(e) {
@@ -29,9 +40,33 @@ const SignIn = () => {
     if (!password) {
       setErrPassword("Enter your password");
     }
-
     if (email && password) {
-      console.log(email, password);
+      setIsLoading(true);
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          dispatch(
+            setUserInfo({
+              _id: user.uid,
+              userName: user.displayName,
+              email: user.email,
+              photo: user.photoURL,
+            })
+          );
+          setIsLoading(false);
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode);
+          setIsLoading(false);
+          setErrMessage("wrong password and email!");
+        });
       setEmail("");
       setPassword("");
     }
@@ -78,7 +113,7 @@ const SignIn = () => {
                     type="password"
                   />
                   {errPassword && (
-                    <p className="text-red-600 text-xs font-semibold tracking-wide flex items-center gap-2 -mt-1.5">
+                    <p className="text-red-600 text-sm font-semibold tracking-wide flex items-center gap-2 -mt-1.5">
                       <span className="italic font-titleFont font-extrabold text-base">
                         !
                       </span>
@@ -93,7 +128,25 @@ const SignIn = () => {
                   Continue
                 </button>
               </div>
-              <p className="text-xs text-black leading-4 mt-4">
+              {isLoading && (
+                <div className="flex justify-center">
+                  <RotatingLines
+                    strokeColor="#FEBD69"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="50"
+                    visible={true}
+                  />
+                </div>
+              )}
+              {errMessage && (
+                <div className="flex justify-center mt-3">
+                  <p className="text-red-600 text-sm font-medium tracking-wide flex items-center gap-2 -mt-1.5">
+                    {errMessage}
+                  </p>
+                </div>
+              )}
+              <p className="text-xs text-black leading-4 mt-3">
                 By Continuing, you agree to Amazon's{" "}
                 <span className="text-blue-600">Conditions of Use </span>and{" "}
                 <span className="text-blue-600">Privace Notice.</span>

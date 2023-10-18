@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
   const products = useSelector((state) => state.amazon.products);
+  const users = useSelector((state) => state.amazon.userInfo);
+  console.log(users);
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
       <div className="w-full h-full inline-flex justify-between items-center mx-auto gap-1 mdl:gap-3 px-4 ">
@@ -37,7 +39,11 @@ const Header = () => {
         </div>
         <Link to="/signin">
           <div className="px-2 text-xs text-gray-100 border border-transparent hover:border-white duration-300 rounded cursor-pointer flex flex-col justify-center h-[70%] ">
-            <p>Hello, sign in</p>
+            {users ? (
+              <p>Hello, {" " + users.userName}</p>
+            ) : (
+              <p>Hello, sign in</p>
+            )}
             <p className="text-white font-bold flex items-center">
               Account & Lists
               <span>
