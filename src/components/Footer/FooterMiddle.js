@@ -5,7 +5,7 @@ import { logo } from "../../assets/index";
 
 const FooterMiddle = () => {
   return (
-    <div className="w-full bg-amazon_light text-white">
+    <div className="w-full bg-amazon_light text-white mt-12 md:mt-24">
       {/* ======================= Middle Top Start here ========================== */}
       <div className="w-full border-b-[1px] border-gray-500 py-10">
         <div className="max-w-5xl mx-auto text-gray-300">
