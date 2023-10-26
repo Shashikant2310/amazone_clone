@@ -24,8 +24,8 @@ const Cart = () => {
   return (
     <div className="w-full bg-gray-100 p-4">
       {products.length > 0 ? (
-        <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
-          <div className=" col-span-4 bg-white px-10 py-10">
+        <div className=" h-auto grid grid-cols-1 md:grid-cols-5 gap-2">
+          <div className="md:col-span-4 bg-white px-2 md:px-10 py-10">
             <div className="flex justify-between border-b pb-8">
               <h1 className="font-medium text-2xl">Shopping Cart</h1>
               <h2 className="font-normal text-xl">3 Items</h2>
@@ -48,9 +48,9 @@ const Cart = () => {
             {products.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center select-none hover:bg-gray-100 -mx-8 px-6 py-5"
+                className="flex flex-col md:flex-row items-center select-none hover:bg-gray-100 -mx-8 px-6 py-5"
               >
-                <div className="flex w-2/5">
+                <div className="flex w-full md:w-2/5">
                   <div className="w-20">
                     <img
                       className="w-24 object-cover"
@@ -71,7 +71,7 @@ const Cart = () => {
                     </a>
                   </div>
                 </div>
-                <div className="flex items-center justify-center w-1/5">
+                <div className="flex items-center justify-center w-full md:w-1/5">
                   {/* svg */}
                   <svg
                     onClick={() => dispatch(decreseQuantity(item.id))}
@@ -116,7 +116,7 @@ const Cart = () => {
               <div>
                 <button
                   onClick={() => dispatch(resetCart())}
-                  className="bg-red-500 font-semibold hover:bg-red-600 py-2 px-4 text-sm text-white uppercase duration-300 w-full"
+                  className="border-red-500 border  font-semibold hover:bg-red-600 py-2 px-4 text-sm text-red-500 uppercase duration-300 w-full"
                 >
                   Clear cart
                 </button>
@@ -124,7 +124,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <div className="px-8 py-10">
+          <div className="px-8 py-10 md:block flex items-center flex-col ">
             <h1 className="font-medium text-2xl">Order Summary</h1>
 
             <div className="border-t mt-8">
@@ -132,7 +132,7 @@ const Cart = () => {
                 <span>Total cost</span>
                 <span className="text-xl">${totalPrice}</span>
               </div>
-              <button className="w-full bg-yellow-400 rounded-md py-1 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700">
+              <button className=" md:w-full bg-yellow-400 rounded-md py-1 px-2 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700">
                 Checkout
               </button>
             </div>
