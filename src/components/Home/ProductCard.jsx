@@ -5,13 +5,32 @@ import { AiFillStar } from "react-icons/ai";
 import { FaHeart } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/amazonSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ item }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const _id = item.title;
+
+  const idString = (_id) => {
+    return _id.toLowerCase().split(" ").join("");
+  };
+
+  const rootId = idString(_id);
+
+  const handleProductPage = () => {
+    navigate(`/product/${rootId}`, {
+      state: {
+        product: item,
+      },
+    });
+  };
   return (
     <div className="w-full bg-white text-black p-4 hover:shadow-xl border border-gray-300 rounded-lg group overflow-hidden">
       <div className="w-full h-[120px] md:h-[260px] relative">
         <img
+          onClick={handleProductPage}
           className="w-full h-full object-contain scale-90 hover:scale-100 transition-transform duration-300"
           src={item.image}
           width={300}

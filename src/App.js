@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import { productData } from "./api/api";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
+import ProductPage from "./components/Home/ProductPage";
 
 const Layout = () => {
   return (
@@ -28,18 +29,43 @@ const Layout = () => {
 };
 
 export default function App() {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} loader={productData} />
-          <Route path="/cart" element={<Cart />} />
-        </Route>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/registration" element={<Register />} />
-      </Route>
-    )
-  );
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+          loader: productData,
+        },
+        {
+          path: "product/:id",
+          element: <ProductPage />,
+        },
+        {
+          path: "/cart",
+          element: <Cart />,
+        },
+      ],
+    },
+    {
+      path: "/signin",
+      element: <SignIn />,
+    },
+    {
+      path: "/registration",
+      element: <Register />,
+    },
+  ]);
+  {
+    /* <Route path="/" element={<Layout />}>
+      <Route index element={<Home />} loader={productData} />
+      <Route path="/cart" element={<Cart />} />
+    </Route>
+    <Route path="/signin" element={<SignIn />} />
+    <Route path="/registration" element={<Register />} /> */
+  }
   return (
     <div className=" font-bodyFont bg-gray-100">
       <RouterProvider router={router}></RouterProvider>
